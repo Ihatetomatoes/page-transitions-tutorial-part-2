@@ -2,43 +2,55 @@ function init(){
     
     const loader = document.querySelector('.loader');
 
-    // reset position of the loading screen
-    gsap.set(loader, {
-        scaleX: 0, 
-        rotation: 10, 
-        xPercent: -5,
-        yPercent: -50, 
-        transformOrigin: 'left center', 
-        autoAlpha: 1
-    });
+    // reset loader to be invisible on page load
+    gsap.set('.loader', {scale: 0});
 
-    function loaderIn() {
-        // GSAP tween to stretch the loading screen across the whole screen
-        return gsap.fromTo(loader, 
+    function loaderIn(trigger) {
+
+        // console.log(trigger.getBoundingClientRect());
+        const { height, width, top, left } = trigger.getBoundingClientRect();
+        const triggerTop = Math.floor(top);
+        const triggerLeft = Math.floor(left);
+        const triggerWidth = Math.floor(width);
+        const triggerHeight = Math.floor(height);
+        // console.log({triggerTop, triggerLeft, triggerHeight, triggerWidth});
+
+        // GSAP timeline to stretch the loading screen across the whole screen
+        const tl = gsap.timeline();
+        tl
+            .set(loader, {
+                autoAlpha: 1,
+                x: triggerLeft + (triggerWidth/2),
+                y: triggerTop + (triggerHeight/2),
+                xPercent: -50,
+                yPercent: -50,
+            })
+            .fromTo(loader, 
             {
-                rotation: 10,
-                scaleX: 0,
-                xPercent: -5
+                scale: 0,
+                transformOrigin: 'center center'
             },
             { 
                 duration: 0.8,
-                xPercent: 0,
-                scaleX: 1, 
-                rotation: 0,
-                ease: 'Power4.inOut', 
-                transformOrigin: 'left center'
+                scale: 23, 
+                ease: 'Power4.out'
             });
+        return tl;
     }
 
-    function loaderAway() {
+    function loaderAway(next) {
+        document.body.removeAttribute('class');
+        document.body.classList.add(next.container.dataset.class);
+        // const bodyClass = trigger.dataset.class;
+        // console.log(bodyClass);
         // GSAP tween to hide the loading screen
+        // maybe a different effect for the reveal?
         return gsap.to(loader, { 
-            duration: 0.8, 
-            scaleX: 0,
-            xPercent: 5, 
-            rotation: -10, 
-            transformOrigin: 'right center', 
-            ease: 'Power4.inOut'
+            duration: 0.7, 
+            scaleX: 15, 
+            scaleY: 7, 
+            yPercent: -2000, 
+            ease: 'Power1.inOut'
         });
     }
 
@@ -46,7 +58,6 @@ function init(){
     barba.hooks.before(() => {
 
         document.querySelector('html').classList.add('is-transitioning');
-        barba.wrapper.classList.add('is-animating');
 
     });
 
@@ -54,7 +65,6 @@ function init(){
     barba.hooks.after(() => {
 
         document.querySelector('html').classList.remove('is-transitioning');
-        barba.wrapper.classList.remove('is-animating');
 
     });
 
@@ -67,12 +77,12 @@ function init(){
 
     barba.init({
         transitions: [{
-            async leave() {
-                await loaderIn();
+            async leave({trigger}) {
+                await loaderIn(trigger);
         
             },
-            enter() {
-                loaderAway();
+            enter({next}) {
+                loaderAway(next);
             }
         }]
     })

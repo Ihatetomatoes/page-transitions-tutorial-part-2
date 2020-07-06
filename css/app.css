@@ -4,11 +4,15 @@ body {
     color: #222222;
     position: relative;
 }
-.is-home body {
+.is-home {
     background: #1f213f;  /* fallback for old browsers */
     background: -webkit-linear-gradient(to top, #f87853, #1f213f);  /* Chrome 10-25, Safari 5.1-6 */
     background: linear-gradient(to top, #f87853, #1f213f); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-
+}
+.is-page-2 {
+    background: #1c323d;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to top, #dfe775, #1c323d);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to top, #dfe775, #1c323d); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 .is-transitioning {
     pointer-events: none;
@@ -59,15 +63,15 @@ h1 {
 
 .loader {
     position: fixed;
-    width: 100vw;
-    height: 200vh;
+    width: 100px;
+    height: 100px;
     pointer-events: none;
-    background-color: #FFF6ED;
+    background-color: #1f213f;
     z-index: 1;
     visibility: hidden;
     opacity: 0;
+    border-radius: 100%;
 }
-
 
 /* =Footer */
 .footer-container {
