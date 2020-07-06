@@ -24,6 +24,7 @@ function init(){
                 y: triggerTop + (triggerHeight/2),
                 xPercent: -50,
                 yPercent: -50,
+                scale: 0
             })
             .fromTo(loader, 
             {
@@ -41,17 +42,30 @@ function init(){
     function loaderAway(next) {
         document.body.removeAttribute('class');
         document.body.classList.add(next.container.dataset.class);
+
         // const bodyClass = trigger.dataset.class;
         // console.log(bodyClass);
         // GSAP tween to hide the loading screen
         // maybe a different effect for the reveal?
-        return gsap.to(loader, { 
-            duration: 0.7, 
+        const h1 = next.container.querySelector('h1');
+        const p = next.container.querySelectorAll('p');
+        const img = next.container.querySelector('img');
+
+        const tl = gsap.timeline();
+        return tl.to(loader, { 
+            duration: 1, 
             scaleX: 15, 
             scaleY: 7, 
-            yPercent: -2000, 
-            ease: 'Power1.inOut'
-        });
+            yPercent: 2000, 
+            ease: 'Power4.inOut'
+        }).fromTo([h1, p, img], {
+            autoAlpha: 0
+        }, {
+            duration: 0.9, 
+            autoAlpha: 1, 
+            stagger: 0.02, 
+            ease: 'none'}, 
+        0.3);
     }
 
     // do something before the transition starts
