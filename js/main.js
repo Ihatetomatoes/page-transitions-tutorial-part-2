@@ -16,15 +16,21 @@ function init(){
         // console.log({triggerTop, triggerLeft, triggerHeight, triggerWidth});
 
         // GSAP timeline to stretch the loading screen across the whole screen
+
+        const viewportHeight = window.innerHeight;
+        const viewportWidth = window.innerWidth;     
+        const loaderSize = viewportHeight > viewportWidth ? viewportHeight*2 : viewportWidth*2;
+
         const tl = gsap.timeline();
         tl
             .set(loader, {
                 autoAlpha: 1,
                 x: triggerLeft + (triggerWidth/2),
                 y: triggerTop + (triggerHeight/2),
+                width: loaderSize,
+                height: loaderSize,
                 xPercent: -50,
-                yPercent: -50,
-                scale: 0
+                yPercent: -50
             })
             .fromTo(loader, 
             {
@@ -33,7 +39,7 @@ function init(){
             },
             { 
                 duration: 0.8,
-                scale: 23, 
+                scale: 1, 
                 ease: 'Power4.out'
             });
         return tl;
@@ -54,9 +60,9 @@ function init(){
         const tl = gsap.timeline();
         return tl.to(loader, { 
             duration: 1, 
-            scaleX: 15, 
-            scaleY: 7, 
-            yPercent: 2000, 
+            scaleX: 0.5, // squash the loader
+            scaleY: 0.1, // squash the loader
+            yPercent: 0, // move it down
             ease: 'Power4.inOut'
         }).fromTo([h1, p, img], {
             autoAlpha: 0
